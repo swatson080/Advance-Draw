@@ -32,7 +32,7 @@ class Rectangle:
             self.length = 1
             self.width = 1
 
-    # toString() method - print the rectangle object's ID, length, and width
+    # __str__() method - print the rectangle object's ID, length, and width
     def __str__(self):
         return 'Rectangle {} reporting -- Length: {} -- Width: {}'.format(self.id, self.length, self.width)
 
@@ -129,11 +129,17 @@ class Rectangle:
 # Begin main script
 rect1 = Rectangle(4, 5)
 
+rect1.drawRectRpt(20, 3)
+print()
+rect1.drawRectRpt(10, 10)
 rect1.drawFillRectRpt(20,3)
+print()
 rect1.drawFillRectRpt(10,10)
 
 # while(True):
 #     rect1.drawRectRpt(20, 3)
+#     print()
 #     rect1.drawRectRpt(10, 10)
 #     rect1.drawFillRectRpt(20,3)
+#     print()
 #     rect1.drawFillRectRpt(10,10)
