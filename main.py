@@ -1,4 +1,5 @@
 # Advance Draw - Stephen Watson 11/9/2021
+# TODO: test comparison functions
 
 # Import statements
 
@@ -13,9 +14,6 @@ class Rectangle:
         """
         Initializes a rectangle object, and tracks how many have been made
         """
-
-        # Print rectangle info
-        #print(f'Rectangle {self.count} reporting for duty')
 
         # Rectangle ID
         self.id = Rectangle.count
@@ -32,9 +30,42 @@ class Rectangle:
             self.length = 1
             self.width = 1
 
+        # Print rectangle info
+        #print(self)
+
     # __str__() method - print the rectangle object's ID, length, and width
     def __str__(self):
         return 'Rectangle {} reporting -- Length: {} -- Width: {}'.format(self.id, self.length, self.width)
+
+    # Overload comparison operators
+
+    # Overload the < operator
+    def __lt__(self, rect2):
+        if (self.width < rect2.width) or (self.width == rect2.width and self.length < rect2.length):
+            return True
+        else:
+            return False
+
+    # Overload the <= operator
+    def __le__(self, rect2):
+        if (self.width <= rect2.width) or (self.width == rect2.width and self.length <= rect2.length):
+            return True
+        else:
+            return False
+
+    # Overload the > operator
+    def __gt__(self, rect2):
+        if (self.width > rect2.width) or (self.width == rect2.width and self.length > rect2.length):
+            return True
+        else:
+            return False
+
+    # Overload the >= operator
+    def __ge__(self, rect2):
+        if (self.width >= rect2.width) or (self.width == rect2.width and self.length >= rect2.length):
+            return True
+        else:
+            return False
 
     # Returns the number of Rectangles created
     def getNumRect(self):
@@ -128,6 +159,12 @@ class Rectangle:
 
 # Begin main script
 rect1 = Rectangle(4, 5)
+rect2 = Rectangle(44, 4)
+
+if rect1 < rect2:
+    print("rect1 < rect2")
+else:
+    print("rect1 >= rect2")
 
 rect1.drawRectRpt(20, 3)
 print()
