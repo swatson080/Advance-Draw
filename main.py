@@ -8,7 +8,7 @@
 # Defines a rectangle object and provides functions to draw it, e.g. print a rectangle to the screen
 class Rectangle:
     # Tracks how many rectangles have been made - static variable
-    count = 1
+    count = 0
 
     def __init__(self, length = None, width = None):
         """
@@ -16,9 +16,11 @@ class Rectangle:
         """
 
         # Rectangle ID
-        self.id = Rectangle.count
         # Increment count
         Rectangle.count += 1
+
+        self.id = Rectangle.count
+
         # Initialize rectangle dimensions
         if length != None and width != None:
             self.length = length
@@ -70,6 +72,8 @@ class Rectangle:
     # Returns the number of Rectangles created
     def getNumRect(self):
         return Rectangle.count
+
+    # Drawing functions
 
     # Draws a rectangle of dimensions length and width
     def drawRect(self, includeInfo = False):
@@ -147,7 +151,7 @@ class Rectangle:
     # Draws a filled rectangle repeatedly across the screen
     # drawAmt: the number of times to draw the rectangle
     # padding: the amount of space between rectangles
-    def drawFillRectRpt(self, drawAmt, padding):
+    def drawFillRectRpt(self, drawAmt = 1, padding = 1):
         for k in range(self.width):
             for i in range(drawAmt):
                 for j in range(self.length):
@@ -156,27 +160,69 @@ class Rectangle:
                     print(' ', end = '')
             print('\n', end = '')
 
+# Takes an array of rectangle objects and sorts them by size (left to right)
+# Implements mergesort
+def sortRect(rectangles, low, high):
+    if low >= high:
+        return
+
+    middle =(low + high) // 2
+    sortRect(rectangles, low, middle)
+    sortRect(rectangles, middle+1, high)
+    merge(rectangles, low, high, middle)
+
+def merge(rectangles, low, high, middle):
+    # Make copies of each array
+    leftCopy = rectangles[low:middle+1]
+    rightCopy = rectangles[middle+1:high+1]
+
+    # Pointers
+    lowPos = 0
+    highPos = 0
+    sortedIndex = low
+
+    while lowPos <len(leftCopy) and highPos < len(rightCopy):
+
+        if leftCopy[lowPos] <= rightCopy[highPos]:
+            rectangles[sortedIndex] = leftCopy[lowPos]
+            lowPos += 1
+
+        else:
+            rectangles[sortedIndex] = rightCopy[highPos]
+            highPos += 1
+
+        sortedIndex += 1
+
+    while lowPos < len(leftCopy):
+        rectangles[sortedIndex] = leftCopy[lowPos]
+        lowPos += 1
+        sortedIndex += 1
+
+    while highPos < len(rightCopy):
+        rectangles[sortedIndex] = rightCopy[highPos]
+        highPos += 1
+        sortedIndex += 1
+
+
+
 
 # Begin main script
 rect1 = Rectangle(4, 5)
 rect2 = Rectangle(44, 4)
+rect3 = Rectangle()
 
-if rect1 < rect2:
-    print("rect1 < rect2")
-else:
-    print("rect1 >= rect2")
+rectangles = []
+rectangles.append(rect1)
+rectangles.append(rect2)
+rectangles.append(rect3)
 
-rect1.drawRectRpt(20, 3)
-print()
-rect1.drawRectRpt(10, 10)
-rect1.drawFillRectRpt(20,3)
-print()
-rect1.drawFillRectRpt(10,10)
+print("BEFORE SORTING")
+for rect in rectangles:
+    rect.drawRect()
 
-# while(True):
-#     rect1.drawRectRpt(20, 3)
-#     print()
-#     rect1.drawRectRpt(10, 10)
-#     rect1.drawFillRectRpt(20,3)
-#     print()
-#     rect1.drawFillRectRpt(10,10)
+sortRect(rectangles, 0, len(rectangles) - 1)
+
+print("\n\nAFTER SORTING")
+
+for rect in rectangles:
+    rect.drawRect()
