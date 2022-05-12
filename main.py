@@ -166,7 +166,7 @@ def sortRect(rectangles, low, high):
     if low >= high:
         return
 
-    middle =(low + high) // 2
+    middle = (low + high) // 2
     sortRect(rectangles, low, middle)
     sortRect(rectangles, middle+1, high)
     merge(rectangles, low, high, middle)
@@ -181,7 +181,7 @@ def merge(rectangles, low, high, middle):
     highPos = 0
     sortedIndex = low
 
-    while lowPos <len(leftCopy) and highPos < len(rightCopy):
+    while lowPos < len(leftCopy) and highPos < len(rightCopy):
 
         if leftCopy[lowPos] <= rightCopy[highPos]:
             rectangles[sortedIndex] = leftCopy[lowPos]
@@ -203,18 +203,113 @@ def merge(rectangles, low, high, middle):
         highPos += 1
         sortedIndex += 1
 
+# Advance Draw
+def advanceDraw(offset, padding, rectangles):
+    largestWidth = 0
+    largeIndex = 0
+    # Used to index into the rectangle array
+    lrg = 0
 
+    # Find the rectangle with the largest width and get its index
+    for rect in rectangles:
+        if rect.width > largestWidth:
+            largestWidth = rect.width
+            largeIndex = lrg
+        lrg += 1
+
+    # Top line - offset
+    for it in range(offset):
+        print(' ', end='')
+
+    # Draw top line of the widest rectangle
+    for it in range(len(rectangles)):
+        #print(it, end = '')
+        if largeIndex == it:
+            for j in range(rectangles[it].length):
+                print('*', end = '')
+            for j in range(padding):
+                print(' ', end = '')
+
+        elif rectangles[it].width == largestWidth:
+            for j in range(rectangles[it].length):
+                print('*', end = '')
+            for j in range(padding):
+                print(' ', end = '')
+
+        else:
+            for j in range(rectangles[it].length):
+                print(' ', end = '')
+            for j in range(padding):
+                print(' ', end = '')
+
+    print('\n', end = '')
+
+    # Draw the bodies of the rectangles
+    # This will include the top line of any other rectangles
+    # We need to loop (largestWidth - 2) times
+    # On each loop: print the offset, then loop through the rect array
+    # each pass through this loop, you will draw the contents of the
+    # corresponding rectangle - will need to check if the width is > i.
+    # If the width of a rect in the array matches the current value of i
+    # That means you found the top line of another rectangle.
+    # For each rect, print the padding
+    for i in range((largestWidth - 2), 0, -1): #?
+        # print the offset
+        for j in range(offset):
+            print(' ', end = '')
+
+        # loop through the rect array
+        for j in range(len(rectangles)):
+            if rectangles[j].width == (i + 1) and j != largeIndex:
+                for k in range(rectangles[j].length):
+                    print('*', end = '')
+                for k in range(padding):
+                    print(' ', end = '')
+
+            elif rectangles[j].width > i:
+                for k in range(rectangles[j].length):
+                    if k == 0 or k == (rectangles[j].length - 1):
+                        print('*', end = '')
+                    else:
+                        print(' ', end = '')
+                for k in range(padding):
+                    print(' ', end = '')
+
+            else:
+                for k in range(rectangles[j].length + padding):
+                    print(' ', end = '')
+
+        print('\n', end = '')
+
+    if largestWidth == 1: # Do nothing, because you already printed the rect + newline
+        pass
+    else:
+        for z in range(offset):
+            print(' ', end = '')
+
+        for i in range(len(rectangles)):
+            for j in range(rectangles[i].length):
+                print('*', end = '')
+            for j in range(padding):
+                print(' ', end = '')
+
+    print('\n', end = '')
 
 
 # Begin main script
 rect1 = Rectangle(4, 5)
-rect2 = Rectangle(44, 4)
+rect2 = Rectangle(4, 4)
 rect3 = Rectangle()
+rect4 = Rectangle(4, 3)
 
 rectangles = []
 rectangles.append(rect1)
 rectangles.append(rect2)
 rectangles.append(rect3)
+rectangles.append(rect4)
+
+print("ADVANCE DRAW BEFORE SORTING")
+advanceDraw(0, 1, rectangles)
 
 print("BEFORE SORTING")
 for rect in rectangles:
@@ -226,3 +321,7 @@ print("\n\nAFTER SORTING")
 
 for rect in rectangles:
     rect.drawRect()
+
+print('\n\nBEGINNING ADVANCE DRAW\n\n')
+
+advanceDraw(0, 1, rectangles)
